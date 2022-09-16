@@ -14,6 +14,6 @@ type Server struct {
 
 
 func (s *Server) AddHeader(key, value string) {
-    newHeader := map[string]string{key: key, value: value}
+    newHeader := map[string]string{key: value}
     s.Headers = append(s.Headers, newHeader)
 }
