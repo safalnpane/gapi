@@ -54,6 +54,36 @@ func (p *Project) AddServer(name, description, baseUrl string) {
 }
 
 
+// Convert the project struct into JSON and write into the project file
+func (p *Project) WriteProject() {
+    content, err := json.Marshal(p)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    err = ioutil.WriteFile(currentProjectConfig, content, 0644)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+}
+
+
+// Read the project config and populate the project struct
+func (p *Project) ReadProject() {
+    content, err := ioutil.ReadFile(currentProjectConfig)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    err = json.Unmarshal(content, p)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+}
+
+
 func ProjectInit(name, description string) {
     // Initialise the gapi project
     // Creates necessary directories and files
@@ -72,16 +102,6 @@ func ProjectInit(name, description string) {
     }
     newProject.AddServer("localhost", "Local API server", "http://localhost:8000/api")
     newProject.Servers[0].AddHeader("Content-Type", "application/json")
-    // Convert into json
-    content, err := json.Marshal(newProject)
-    if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-    err = ioutil.WriteFile(currentProjectConfig, content, 0644)
-    if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
+    newProject.WriteProject()
     fmt.Printf("[+] Project '%v' Initialised\n", name)
 }
