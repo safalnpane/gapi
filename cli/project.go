@@ -58,5 +58,5 @@ func ProjectInit(name, description string) {
     if err != nil {
         log.Fatal(err)
     }
-    fmt.Printf("[+] Project %v Initialised", name)
+    fmt.Printf("[+] Project '%v' Initialised\n", name)
 }
