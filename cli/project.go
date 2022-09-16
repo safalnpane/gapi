@@ -2,11 +2,20 @@ package cli
 
 
 import (
-    "log"
     "os"
     "encoding/json"
     "fmt"
     "io/ioutil"
+)
+
+const (
+    projectDirectoryName = "gapi_project"
+    projectConfigName = "project.json"
+)
+
+var (
+    currentProjectDirectory string
+    currentProjectConfig string
 )
 
 
@@ -15,6 +24,23 @@ type Project struct {
     Description string
     DefaultServer string
     Servers []Server
+}
+
+
+// Check if 'gapi_project' folder exists on the current directory.
+// Also make sure, the 'project.json' exists.
+func IsProject() bool {
+    currentDirectory, err := os.Getwd()
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    currentProjectDirectory = currentDirectory + string(os.PathSeparator) + projectDirectoryName
+    currentProjectConfig = currentProjectDirectory + string(os.PathSeparator) + projectConfigName
+    if _, err = os.Stat(currentProjectConfig); err == nil {
+        return true
+    }
+    return false
 }
 
 
@@ -31,15 +57,13 @@ func (p *Project) AddServer(name, description, baseUrl string) {
 func ProjectInit(name, description string) {
     // Initialise the gapi project
     // Creates necessary directories and files
-    currentDirectory, err := os.Getwd()
-    if err != nil {
-        log.Fatal(err)
+    if IsProject() {
+        fmt.Println("[-] Project Already exists.")
+        os.Exit(1)
     }
-    // Create 'gapi_project' directory
-    gapiDirectory := currentDirectory + string(os.PathSeparator) + "gapi_project"
-    err = os.Mkdir(gapiDirectory, 0755)
+    err := os.Mkdir(currentProjectDirectory, 0755)
     if err != nil {
-        log.Fatal(err)
+        fmt.Println(err)
     }
     newProject := Project{
         Name: name,
@@ -51,12 +75,13 @@ func ProjectInit(name, description string) {
     // Convert into json
     content, err := json.Marshal(newProject)
     if err != nil {
-        log.Fatal(err)
+        fmt.Println(err)
+        os.Exit(1)
     }
-    projectConfPath := gapiDirectory + string(os.PathSeparator) + "project.json"
-    err = ioutil.WriteFile(projectConfPath, content, 0644)
+    err = ioutil.WriteFile(currentProjectConfig, content, 0644)
     if err != nil {
-        log.Fatal(err)
+        fmt.Println(err)
+        os.Exit(1)
     }
     fmt.Printf("[+] Project '%v' Initialised\n", name)
 }
