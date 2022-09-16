@@ -1,0 +1,12 @@
+{
+  "name": "get_request",
+  "description": "This request gets something from the server",
+  "path": "/getsomething",
+  "method": "GET",
+  "use_server_headers": false,
+  "headers": [
+    {
+      "Content-Type": "application/json"
+    }
+  ]
+}

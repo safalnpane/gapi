@@ -1,0 +1,15 @@
+{
+  "name": "put_request",
+  "description": "This request putss something to the server",
+  "path": "/putsomething",
+  "method": "PUT",
+  "use_server_headers": false,
+  "headers": [
+    {
+      "Content-Type": "application/json"
+    }
+  ],
+  "body": {
+    "somekey": "somevalue"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "delete_request",
+  "description": "This request deletes something from the server",
+  "path": "/deletesomething",
+  "method": "DELETE",
+  "use_server_headers": false,
+  "headers": [
+    {
+      "Content-Type": "application/json"
+    }
+  ]
+}

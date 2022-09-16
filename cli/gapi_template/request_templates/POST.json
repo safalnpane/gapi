@@ -1,0 +1,15 @@
+{
+  "name": "post_request",
+  "description": "This request posts something to the server",
+  "path": "/postsomething",
+  "method": "POST",
+  "use_server_headers": false,
+  "headers": [
+    {
+      "Content-Type": "application/json"
+    }
+  ],
+  "body": {
+    "somekey": "somevalue"
+  }
+}
